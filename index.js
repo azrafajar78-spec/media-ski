@@ -10869,3 +10869,89 @@ an.handleFilterCache = function(event) {
 
 })(createjs = createjs||{}, AdobeAn = AdobeAn||{});
 var createjs, AdobeAn;
+(lib.adobeanimateSKINew = function(mode,startPosition,loop,reversed) {
+if (loop == null) { loop = true; }
+if (reversed == null) { reversed = false; }
+var props = new Object();
+props.mode = mode;
+props.startPosition = startPosition;
+props.labels = {};
+props.loop = loop;
+props.reversed = reversed;
+cjs.MovieClip.apply(this,[props]);
+
+	this.instance = new lib.Symbol13();
+	this.instance.setTransform(0,0);
+	this.timeline.addTween(cjs.Tween.get(this.instance).wait(1));
+
+	this._renderFirstFrame();
+}).prototype = p = new cjs.MovieClip();
+p.nominalBounds = new cjs.Rectangle(0,0,1920,1080);
+
+lib.properties = {
+	id: 'BC91BA2D125B6B49AD843D32D707C5F5',
+	width: 1920,
+	height: 1080,
+	fps: 24,
+	color: "#FFFFFF",
+	opacity: 1.00,
+	manifest: [],
+	preloads: []
+};
+
+var AdobeAn = {
+	compositions: {},
+	getComposition: function(id) {
+		return this.compositions[id];
+	},
+	compositionLoaded: function(id) {
+		var comp = AdobeAn.compositions[id];
+		var lib = comp.getLibrary();
+		var ss = comp.getSpriteSheet();
+		return lib;
+	},
+	makeResponsive: function(isResp, respDim, isScale, scaleType, domContainers) {
+		var lastW, lastH, lastS=1;
+		window.addEventListener('resize', resizeCanvas);
+		resizeCanvas();
+		function resizeCanvas() {
+			var w = lib.properties.width, h = lib.properties.height;
+			var iw = window.innerWidth, ih=window.innerHeight;
+			var pRatio = window.devicePixelRatio || 1, xRatio=iw/w, yRatio=ih/h, sRatio=1;
+			if(isResp) {
+				if((respDim=='width'&&lastW==iw) || (respDim=='height'&&lastH==ih)) {
+					sRatio = lastS;
+				}
+				else if(!isScale) {
+					if(iw<w || ih<h)
+						sRatio = Math.min(xRatio, yRatio);
+				}
+				else if(scaleType==1) {
+					sRatio = Math.min(xRatio, yRatio);
+				}
+				else if(scaleType==2) {
+					sRatio = Math.max(xRatio, yRatio);
+				}
+			}
+			domContainers[0].width = w * pRatio * sRatio;
+			domContainers[0].height = h * pRatio * sRatio;
+			domContainers.forEach(function(container) {
+				container.style.width = w * sRatio + 'px';
+				container.style.height = h * sRatio + 'px';
+			});
+			stage.scaleX = pRatio * sRatio;
+			stage.scaleY = pRatio * sRatio;
+			lastW = iw; lastH = ih; lastS = sRatio;
+			stage.tickOnUpdate = false;
+			stage.update();
+			stage.tickOnUpdate = true;
+		}
+	}
+};
+
+AdobeAn.compositions['BC91BA2D125B6B49AD843D32D707C5F5'] = {
+	getStage: function() { return stage; },
+	getLibrary: function() { return lib; },
+	getSpriteSheet: function() { return ss; },
+	getImages: function() { return img; }
+};
